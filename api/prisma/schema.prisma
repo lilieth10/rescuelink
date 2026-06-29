@@ -1,0 +1,418 @@
+// RescueLink — Domain Model
+// Multi-country, multi-emergency humanitarian coordination platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum EmergencyType {
+  EARTHQUAKE
+  HURRICANE
+  FLOOD
+  LANDSLIDE
+  TSUNAMI
+  WILDFIRE
+  OTHER
+}
+
+enum EmergencyStatus {
+  ACTIVE
+  RECOVERING
+  CLOSED
+}
+
+enum UserRole {
+  CITIZEN
+  VOLUNTEER
+  RESCUER
+  HOSPITAL
+  SHELTER
+  NGO
+  ADMIN
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
+  UNKNOWN
+}
+
+enum MissingPersonStatus {
+  SEARCHING
+  POSSIBLE_MATCH
+  FOUND
+  REUNITED
+}
+
+enum PhysicalState {
+  STABLE
+  INJURED
+  CRITICAL
+  DECEASED
+}
+
+enum EmotionalState {
+  CALM
+  DISTRESSED
+  TRAUMATIZED
+  UNRESPONSIVE
+  UNKNOWN
+}
+
+enum ResourceType {
+  WATER
+  FOOD
+  MEDICINE
+  MILK
+  DIAPERS
+  ELECTRICITY
+  INTERNET
+  BATHROOMS
+  OTHER
+}
+
+enum ResourcePriority {
+  CRITICAL
+  URGENT
+  LOW_STOCK
+  OK
+}
+
+enum OrganizationType {
+  GOVERNMENT
+  RED_CROSS
+  NGO
+  HOSPITAL
+  CIVIL_PROTECTION
+  OTHER
+}
+
+enum SyncOperation {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum SyncStatus {
+  PENDING
+  IN_PROGRESS
+  SYNCED
+  FAILED
+}
+
+// ─── Geography (country is data, not a system condition) ─────────────────────
+
+model Country {
+  id        String   @id @default(cuid())
+  code      String   @unique @db.VarChar(3) // ISO 3166-1 alpha-3
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  regions      Region[]
+  emergencies  Emergency[]
+  organizations Organization[]
+
+  @@map("countries")
+}
+
+model Region {
+  id        String   @id @default(cuid())
+  code      String
+  name      String
+  countryId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  country       Country        @relation(fields: [countryId], references: [id])
+  municipalities Municipality[]
+
+  @@unique([countryId, code])
+  @@map("regions")
+}
+
+model Municipality {
+  id        String   @id @default(cuid())
+  code      String
+  name      String
+  regionId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  region Region @relation(fields: [regionId], references: [id])
+  cities City[]
+
+  @@unique([regionId, code])
+  @@map("municipalities")
+}
+
+model City {
+  id             String   @id @default(cuid())
+  name           String
+  municipalityId String
+  latitude       Float?
+  longitude      Float?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  municipality Municipality @relation(fields: [municipalityId], references: [id])
+  shelters     Shelter[]
+  hospitals    Hospital[]
+
+  @@map("cities")
+}
+
+// ─── Emergency (each disaster is an independent entity) ──────────────────────
+
+model Emergency {
+  id        String          @id @default(cuid())
+  name      String
+  countryId String
+  type      EmergencyType
+  startDate DateTime
+  endDate   DateTime?
+  status    EmergencyStatus @default(ACTIVE)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  country          Country           @relation(fields: [countryId], references: [id])
+  missingPersons   MissingPerson[]
+  foundPersons     FoundPerson[]
+  protectedChildren ProtectedChild[]
+  shelters         Shelter[]
+  hospitals        Hospital[]
+
+  @@map("emergencies")
+}
+
+// ─── Auth & Organizations ───────────────────────────────────────────────────
+
+model Organization {
+  id         String           @id @default(cuid())
+  name       String
+  type       OrganizationType
+  verified   Boolean          @default(false)
+  countryId  String
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  country           Country           @relation(fields: [countryId], references: [id])
+  users             User[]
+  protectedChildren ProtectedChild[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String
+  firstName      String
+  lastName       String
+  role           UserRole @default(CITIZEN)
+  organizationId String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization        Organization?  @relation(fields: [organizationId], references: [id])
+  missingPersons      MissingPerson[] @relation("ReportedBy")
+  foundPersons        FoundPerson[]   @relation("RegisteredBy")
+
+  @@map("users")
+}
+
+// ─── Module 1: Missing Persons ───────────────────────────────────────────────
+
+model MissingPerson {
+  id                  String              @id @default(cuid())
+  emergencyId         String
+  photoUrl            String?
+  name                String
+  age                 Int?
+  sex                 Sex                 @default(UNKNOWN)
+  nationality         String?
+  languages           String[]            @default([])
+  lastKnownLocation   String
+  lastSeenLatitude    Float?
+  lastSeenLongitude   Float?
+  lastSeenAt          DateTime?
+  physicalDescription String?
+  clothing            String?
+  medicalConditions   String?
+  familyContact       String?
+  status              MissingPersonStatus @default(SEARCHING)
+  reportedById        String?
+  clientId            String?             // offline client UUID for sync
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  emergency  Emergency @relation(fields: [emergencyId], references: [id])
+  reportedBy User?     @relation("ReportedBy", fields: [reportedById], references: [id])
+
+  @@index([emergencyId, status])
+  @@index([clientId])
+  @@map("missing_persons")
+}
+
+// ─── Module 2: Found Persons (authorized personnel only) ─────────────────────
+
+model FoundPerson {
+  id              String         @id @default(cuid())
+  code            String         @unique // RL-CL-2027-000245
+  emergencyId     String
+  photoUrl        String?
+  approximateAge  Int?
+  sex             Sex            @default(UNKNOWN)
+  physicalState   PhysicalState  @default(STABLE)
+  emotionalState  EmotionalState @default(UNKNOWN)
+  canSpeak        Boolean        @default(true)
+  canWalk         Boolean        @default(true)
+  foundLocation   String
+  latitude        Float?
+  longitude       Float?
+  hospitalId      String?
+  shelterId       String?
+  notes           String?
+  registeredById  String?
+  clientId        String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  emergency    Emergency @relation(fields: [emergencyId], references: [id])
+  hospital     Hospital? @relation(fields: [hospitalId], references: [id])
+  shelter      Shelter?  @relation(fields: [shelterId], references: [id])
+  registeredBy User?     @relation("RegisteredBy", fields: [registeredById], references: [id])
+
+  @@index([emergencyId])
+  @@index([code])
+  @@map("found_persons")
+}
+
+// ─── Module 3: Protected Children (never public) ─────────────────────────────
+
+model ProtectedChild {
+  id                  String         @id @default(cuid())
+  internalCode        String         @unique
+  qrCode              String         @unique
+  emergencyId         String
+  photoUrl            String?
+  age                 Int?
+  name                String?
+  foundLocation       String
+  latitude            Float?
+  longitude           Float?
+  medicalState        String?
+  emotionalState      EmotionalState @default(UNKNOWN)
+  temporaryGuardian   String?
+  responsibleOrgId    String
+  foundAt             DateTime       @default(now())
+  clientId            String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  emergency      Emergency    @relation(fields: [emergencyId], references: [id])
+  responsibleOrg Organization @relation(fields: [responsibleOrgId], references: [id])
+
+  @@index([emergencyId])
+  @@map("protected_children")
+}
+
+// ─── Module 4: Shelters ──────────────────────────────────────────────────────
+
+model Shelter {
+  id            String   @id @default(cuid())
+  emergencyId   String
+  cityId        String
+  name          String
+  address       String?
+  latitude      Float?
+  longitude     Float?
+  capacity      Int      @default(0)
+  occupied      Int      @default(0)
+  hasWater      Boolean  @default(false)
+  hasFood       Boolean  @default(false)
+  hasMedicine   Boolean  @default(false)
+  hasMilk       Boolean  @default(false)
+  hasDiapers    Boolean  @default(false)
+  hasElectricity Boolean @default(false)
+  hasInternet   Boolean  @default(false)
+  hasBathrooms  Boolean  @default(false)
+  allowsPets    Boolean  @default(false)
+  isAccessible  Boolean  @default(false)
+  urgentNeeds   String?
+  clientId      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  emergency   Emergency       @relation(fields: [emergencyId], references: [id])
+  city        City            @relation(fields: [cityId], references: [id])
+  resources   ShelterResource[]
+  foundPersons FoundPerson[]
+
+  @@index([emergencyId])
+  @@map("shelters")
+}
+
+model ShelterResource {
+  id        String           @id @default(cuid())
+  shelterId String
+  type      ResourceType
+  priority  ResourcePriority @default(OK)
+  quantity  Int?
+  notes     String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  shelter Shelter @relation(fields: [shelterId], references: [id], onDelete: Cascade)
+
+  @@unique([shelterId, type])
+  @@map("shelter_resources")
+}
+
+// ─── Hospitals ───────────────────────────────────────────────────────────────
+
+model Hospital {
+  id          String   @id @default(cuid())
+  emergencyId String?
+  cityId      String
+  name        String
+  address     String?
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  emergency    Emergency?    @relation(fields: [emergencyId], references: [id])
+  city         City          @relation(fields: [cityId], references: [id])
+  foundPersons FoundPerson[]
+
+  @@map("hospitals")
+}
+
+// ─── Offline Sync Queue ─────────────────────────────────────────────────────
+
+model SyncQueue {
+  id         String        @id @default(cuid())
+  clientId   String        // device/client UUID
+  entityType String        // missing_person, found_person, shelter, etc.
+  entityId   String        // local or server entity ID
+  operation  SyncOperation
+  payload    Json
+  status     SyncStatus    @default(PENDING)
+  attempts   Int           @default(0)
+  lastError  String?
+  createdAt  DateTime      @default(now())
+  syncedAt   DateTime?
+
+  @@index([clientId, status])
+  @@index([status, createdAt])
+  @@map("sync_queue")
+}

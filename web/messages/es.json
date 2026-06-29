@@ -22,7 +22,22 @@
     "online": "En línea",
     "offline": "Sin conexión — modo offline",
     "pendingSync": "{count} pendientes de sincronizar",
-    "apiOk": "Servidor conectado"
+    "apiOk": "Servidor conectado",
+    "syncing": "Sincronizando…"
+  },
+  "sync": {
+    "offlineBanner": "Estás sin conexión. Los registros se guardan en tu dispositivo y se sincronizan automáticamente cuando vuelva Internet.",
+    "savedLocally": "Guardado en tu dispositivo. Se sincronizará cuando haya conexión.",
+    "refreshing": "Actualizando lista…",
+    "localOnly": "Solo en este dispositivo — pendiente de sincronizar con el servidor",
+    "syncStatus": {
+      "PENDING": "Pendiente",
+      "IN_PROGRESS": "Sincronizando",
+      "SYNCED": "Sincronizado",
+      "FAILED": "Error al sincronizar"
+    },
+    "matchHint": "Posible reporte duplicado detectado",
+    "matchReasons": "Coincidencias: {reasons}"
   },
   "home": {
     "heroTitle": "Encuentra y coordina ayuda cuando más importa",
@@ -57,6 +72,7 @@
     "title": "Personas desaparecidas",
     "subtitle": "Registra o busca información para ayudar a reunificar familias.",
     "register": "Registrar desaparecido",
+    "scopeNote": "Solo para reportar personas desaparecidas. Si encontraste a alguien, pronto habrá un módulo aparte.",
     "searchPlaceholder": "Buscar por nombre o ubicación…",
     "status": {
       "SEARCHING": "Buscando",
@@ -69,11 +85,22 @@
       "age": "Edad",
       "lastKnownLocation": "Última ubicación conocida",
       "familyContact": "Contacto familiar",
+      "familyContactHint": "7 a 15 dígitos. Ej: 0412 123 4567",
       "physicalDescription": "Descripción física",
       "clothing": "Ropa que llevaba"
     },
     "empty": "Aún no hay registros. Sé el primero en reportar.",
-    "lastSeen": "Visto por última vez en {location}"
+    "lastSeen": "Visto por última vez en {location}",
+    "listTitle": "Personas reportadas",
+    "listCountOne": "{count} persona reportada",
+    "listCountMany": "{count} personas reportadas",
+    "registerSuccess": "Registro recibido para {name}. La información ya está disponible para equipos de búsqueda.",
+    "registerSuccessOffline": "Registro guardado para {name}. Se publicará automáticamente cuando vuelva Internet.",
+    "alreadyRegistered": "{name} ya está registrado/a con esos mismos datos. Revisa la lista abajo.",
+    "contactInvalid": "Teléfono inválido. Usa entre 7 y 15 dígitos.",
+    "possibleMatchTitle": "Posible coincidencia detectada en vivo",
+    "possibleMatchWith": "Con {name} — {reasons}",
+    "howItWorks": "1. Completa los datos · 2. Guardamos el reporte · 3. Familias y rescatistas pueden buscarlo aquí"
   },
   "language": {
     "label": "Idioma",

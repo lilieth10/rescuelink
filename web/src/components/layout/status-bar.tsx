@@ -4,12 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from '@/lib/i18n/locale-provider';
 import { useEffect, useState } from 'react';
 import { checkApiHealth } from '@/lib/api/client';
-import { isOnline } from '@/lib/sync/client-id';
+import { useOnlineStatus } from '@/hooks/use-online-status';
 import { getPendingCount } from '@/lib/sync/sync-queue';
 
 export function StatusBar() {
   const t = useTranslations('status');
-  const [online, setOnline] = useState(true);
+  const online = useOnlineStatus();
   const [pending, setPending] = useState(0);
 
   const { data: health } = useQuery({
@@ -21,23 +21,15 @@ export function StatusBar() {
   });
 
   useEffect(() => {
-    setOnline(isOnline());
-
     const refreshPending = () => {
       void getPendingCount().then(setPending);
     };
 
     refreshPending();
-
-    const handleOnline = () => setOnline(true);
-    const handleOffline = () => setOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    const pendingInterval = window.setInterval(refreshPending, 5_000);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.clearInterval(pendingInterval);
     };
   }, []);
 

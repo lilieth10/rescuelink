@@ -6,6 +6,13 @@ export type MissingPersonStatus =
   | 'FOUND'
   | 'REUNITED';
 
+export interface MatchHint {
+  candidateId: string;
+  candidateName: string;
+  score: number;
+  reasons: string[];
+}
+
 export interface MissingPerson {
   id: string;
   emergencyId: string;
@@ -17,8 +24,11 @@ export interface MissingPerson {
   physicalDescription: string | null;
   clothing: string | null;
   status: MissingPersonStatus;
+  clientId: string | null;
   createdAt: string;
   updatedAt: string;
+  matchHints?: MatchHint[];
+  alreadyExists?: boolean;
 }
 
 export interface CreateMissingPersonInput {

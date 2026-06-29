@@ -22,7 +22,22 @@
     "online": "Online",
     "offline": "Offline — working without connection",
     "pendingSync": "{count} pending sync",
-    "apiOk": "Server connected"
+    "apiOk": "Server connected",
+    "syncing": "Syncing…"
+  },
+  "sync": {
+    "offlineBanner": "You are offline. Records are saved on your device and sync automatically when Internet returns.",
+    "savedLocally": "Saved on your device. It will sync when connection is available.",
+    "refreshing": "Refreshing list…",
+    "localOnly": "On this device only — pending server sync",
+    "syncStatus": {
+      "PENDING": "Pending",
+      "IN_PROGRESS": "Syncing",
+      "SYNCED": "Synced",
+      "FAILED": "Sync failed"
+    },
+    "matchHint": "Possible duplicate report detected",
+    "matchReasons": "Matches: {reasons}"
   },
   "home": {
     "heroTitle": "Find and coordinate help when it matters most",
@@ -57,6 +72,7 @@
     "title": "Missing persons",
     "subtitle": "Register or search for information to help reunite families.",
     "register": "Report missing person",
+    "scopeNote": "Only for reporting missing persons. If you found someone, a separate module is coming soon.",
     "searchPlaceholder": "Search by name or location…",
     "status": {
       "SEARCHING": "Searching",
@@ -69,11 +85,22 @@
       "age": "Age",
       "lastKnownLocation": "Last known location",
       "familyContact": "Family contact",
+      "familyContactHint": "7 to 15 digits. E.g. 0412 123 4567",
       "physicalDescription": "Physical description",
       "clothing": "Clothing worn"
     },
     "empty": "No records yet. Be the first to report.",
-    "lastSeen": "Last seen at {location}"
+    "lastSeen": "Last seen at {location}",
+    "listTitle": "Reported persons",
+    "listCountOne": "{count} person reported",
+    "listCountMany": "{count} people reported",
+    "registerSuccess": "Report received for {name}. The information is now available to search teams.",
+    "registerSuccessOffline": "Report saved for {name}. It will publish automatically when Internet returns.",
+    "alreadyRegistered": "{name} is already registered with the same details. Check the list below.",
+    "contactInvalid": "Invalid phone number. Use 7 to 15 digits.",
+    "possibleMatchTitle": "Possible match detected live",
+    "possibleMatchWith": "With {name} — {reasons}",
+    "howItWorks": "1. Fill in the details · 2. We save the report · 3. Families and rescuers can search here"
   },
   "language": {
     "label": "Language",

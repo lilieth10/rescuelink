@@ -8,6 +8,7 @@ import { EmergenciesModule } from './emergencies/emergencies.module';
 import { HealthModule } from './health/health.module';
 import { MissingPersonsModule } from './missing-persons/missing-persons.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { SyncModule } from './sync/sync.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     EmergenciesModule,
     MissingPersonsModule,
+    SyncModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

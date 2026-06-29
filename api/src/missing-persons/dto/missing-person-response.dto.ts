@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { MissingPersonStatus, Sex } from '@prisma/client';
+import { MatchHintDto } from './match-hint.dto';
 
 export class MissingPersonResponseDto {
   @ApiProperty()
@@ -38,9 +39,20 @@ export class MissingPersonResponseDto {
   @ApiProperty({ enum: MissingPersonStatus })
   status!: MissingPersonStatus;
 
+  @ApiPropertyOptional({ description: 'Offline idempotency key' })
+  clientId!: string | null;
+
   @ApiProperty()
   createdAt!: Date;
 
   @ApiProperty()
   updatedAt!: Date;
+
+  @ApiPropertyOptional({ type: [MatchHintDto] })
+  matchHints?: MatchHintDto[];
+
+  @ApiPropertyOptional({
+    description: 'True si el reporte ya existía (mismo nombre, ubicación y edad)',
+  })
+  alreadyExists?: boolean;
 }

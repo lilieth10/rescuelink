@@ -10,6 +10,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { IsContactPhone } from '../../common/validators/is-contact-phone.validator';
 
 export class CreateMissingPersonDto {
   @ApiProperty({ example: 'ven-earthquake-2026' })
@@ -40,10 +41,11 @@ export class CreateMissingPersonDto {
   @MaxLength(300)
   lastKnownLocation!: string;
 
-  @ApiPropertyOptional({ example: '+58 412 000 0000' })
+  @ApiPropertyOptional({ example: '0412 123 4567' })
   @IsOptional()
   @IsString()
-  @MaxLength(80)
+  @MaxLength(20)
+  @IsContactPhone()
   familyContact?: string;
 
   @ApiPropertyOptional()

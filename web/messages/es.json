@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "title": "RescueLink — Coordinación en emergencias",
+    "description": "Plataforma offline-first para coordinación humanitaria durante desastres naturales."
+  },
+  "common": {
+    "brand": "RescueLink",
+    "tagline": "Coordinación en emergencias",
+    "openSource": "Plataforma humanitaria de código abierto",
+    "comingSoon": "Próximamente",
+    "viewModule": "Ver módulo",
+    "backHome": "Volver al inicio",
+    "loading": "Cargando…",
+    "error": "Algo salió mal. Intenta de nuevo.",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "search": "Buscar",
+    "noResults": "No se encontraron resultados"
+  },
+  "status": {
+    "online": "En línea",
+    "offline": "Sin conexión — modo offline",
+    "pendingSync": "{count} pendientes de sincronizar",
+    "apiOk": "Servidor conectado"
+  },
+  "home": {
+    "heroTitle": "Encuentra y coordina ayuda cuando más importa",
+    "heroSubtitle": "Plataforma multi-país para localizar personas, coordinar refugios y centralizar recursos — incluso sin Internet.",
+    "activeEmergency": "Emergencia activa",
+    "modulesTitle": "Módulos disponibles",
+    "modulesSubtitle": "Herramientas diseñadas para ciudadanos, rescatistas y organizaciones humanitarias."
+  },
+  "modules": {
+    "missingPersons": {
+      "title": "Personas desaparecidas",
+      "description": "Registra y busca personas desaparecidas durante una emergencia."
+    },
+    "foundPersons": {
+      "title": "Personas encontradas",
+      "description": "Registro autorizado de hallazgos con código único."
+    },
+    "protectedChildren": {
+      "title": "Niño seguro",
+      "description": "Protección de menores — acceso restringido."
+    },
+    "shelters": {
+      "title": "Refugios",
+      "description": "Capacidad, recursos y necesidades urgentes."
+    },
+    "humanitarian": {
+      "title": "Centro humanitario",
+      "description": "Logística y coordinación de recursos para ONG."
+    }
+  },
+  "missingPersons": {
+    "title": "Personas desaparecidas",
+    "subtitle": "Registra o busca información para ayudar a reunificar familias.",
+    "register": "Registrar desaparecido",
+    "searchPlaceholder": "Buscar por nombre o ubicación…",
+    "status": {
+      "SEARCHING": "Buscando",
+      "POSSIBLE_MATCH": "Posible coincidencia",
+      "FOUND": "Encontrada",
+      "REUNITED": "Reunificada"
+    },
+    "fields": {
+      "name": "Nombre completo",
+      "age": "Edad",
+      "lastKnownLocation": "Última ubicación conocida",
+      "familyContact": "Contacto familiar",
+      "physicalDescription": "Descripción física",
+      "clothing": "Ropa que llevaba"
+    },
+    "empty": "Aún no hay registros. Sé el primero en reportar.",
+    "lastSeen": "Visto por última vez en {location}"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English"
+  }
+}

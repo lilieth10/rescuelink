@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "title": "RescueLink — Emergency Coordination",
+    "description": "Offline-first platform for humanitarian coordination during natural disasters."
+  },
+  "common": {
+    "brand": "RescueLink",
+    "tagline": "Emergency coordination",
+    "openSource": "Open source humanitarian platform",
+    "comingSoon": "Coming soon",
+    "viewModule": "View module",
+    "backHome": "Back to home",
+    "loading": "Loading…",
+    "error": "Something went wrong. Please try again.",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "noResults": "No results found"
+  },
+  "status": {
+    "online": "Online",
+    "offline": "Offline — working without connection",
+    "pendingSync": "{count} pending sync",
+    "apiOk": "Server connected"
+  },
+  "home": {
+    "heroTitle": "Find and coordinate help when it matters most",
+    "heroSubtitle": "Multi-country platform to locate people, coordinate shelters, and centralize resources — even without Internet.",
+    "activeEmergency": "Active emergency",
+    "modulesTitle": "Available modules",
+    "modulesSubtitle": "Tools designed for citizens, rescuers, and humanitarian organizations."
+  },
+  "modules": {
+    "missingPersons": {
+      "title": "Missing persons",
+      "description": "Register and search for missing people during an emergency."
+    },
+    "foundPersons": {
+      "title": "Found persons",
+      "description": "Authorized registry of findings with unique codes."
+    },
+    "protectedChildren": {
+      "title": "Safe child",
+      "description": "Child protection — restricted access."
+    },
+    "shelters": {
+      "title": "Shelters",
+      "description": "Capacity, resources, and urgent needs."
+    },
+    "humanitarian": {
+      "title": "Humanitarian hub",
+      "description": "Logistics and resource coordination for NGOs."
+    }
+  },
+  "missingPersons": {
+    "title": "Missing persons",
+    "subtitle": "Register or search for information to help reunite families.",
+    "register": "Report missing person",
+    "searchPlaceholder": "Search by name or location…",
+    "status": {
+      "SEARCHING": "Searching",
+      "POSSIBLE_MATCH": "Possible match",
+      "FOUND": "Found",
+      "REUNITED": "Reunited"
+    },
+    "fields": {
+      "name": "Full name",
+      "age": "Age",
+      "lastKnownLocation": "Last known location",
+      "familyContact": "Family contact",
+      "physicalDescription": "Physical description",
+      "clothing": "Clothing worn"
+    },
+    "empty": "No records yet. Be the first to report.",
+    "lastSeen": "Last seen at {location}"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Español",
+    "en": "English"
+  }
+}

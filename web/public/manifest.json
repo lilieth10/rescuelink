@@ -1,11 +1,11 @@
 {
   "name": "RescueLink",
   "short_name": "RescueLink",
-  "description": "Emergency coordination platform — offline-first",
-  "start_url": "/",
+  "description": "Coordinación humanitaria offline-first",
+  "start_url": "/es",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#dc2626",
+  "background_color": "#f8f6f3",
+  "theme_color": "#c41e3a",
   "lang": "es",
   "icons": [
     {

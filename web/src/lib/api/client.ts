@@ -1,4 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
 
 export class ApiError extends Error {
   constructor(
@@ -12,14 +13,18 @@ export class ApiError extends Error {
 
 export async function apiFetch<T>(
   path: string,
-  options?: RequestInit,
+  options?: RequestInit & { cache?: RequestCache },
 ): Promise<T> {
+  const { cache = 'default', ...fetchOptions } = options ?? {};
+
   const response = await fetch(`${API_URL}${path}`, {
-    ...options,
+    ...fetchOptions,
+    cache,
     headers: {
       'Content-Type': 'application/json',
-      ...options?.headers,
+      ...fetchOptions.headers,
     },
+    ...(cache !== 'no-store' ? { next: { revalidate: 30 } } : {}),
   });
 
   if (!response.ok) {
@@ -34,5 +39,5 @@ export async function checkApiHealth(): Promise<{
   service: string;
   timestamp: string;
 }> {
-  return apiFetch('/health');
+  return apiFetch('/health', { cache: 'no-store' });
 }

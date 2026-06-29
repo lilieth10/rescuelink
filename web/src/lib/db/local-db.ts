@@ -19,11 +19,15 @@ export interface SyncQueueItem {
 
 export interface LocalMissingPerson {
   id: string;
+  serverId?: string;
   emergencyId: string;
   name: string;
   age?: number;
   sex: string;
   lastKnownLocation: string;
+  familyContact?: string;
+  physicalDescription?: string;
+  clothing?: string;
   status: string;
   syncStatus: SyncStatus;
   updatedAt: Date;
@@ -40,6 +44,12 @@ class RescueLinkDB extends Dexie {
     this.version(1).stores({
       syncQueue: '++id, clientId, status, entityType, createdAt',
       missingPersons: 'id, emergencyId, status, syncStatus, updatedAt',
+    });
+
+    this.version(2).stores({
+      syncQueue: '++id, clientId, status, entityType, entityId, createdAt',
+      missingPersons:
+        'id, serverId, emergencyId, status, syncStatus, updatedAt, name, lastKnownLocation',
     });
   }
 }
